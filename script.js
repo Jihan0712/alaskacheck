@@ -200,8 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const industry = document.getElementById('industry').value.trim();
     const errorText = document.getElementById('form-error');
 
+    // Basic Validation Check
     if (!fullName || !email || !phone || !industry) {
-      if (errorText) errorText.innerText = "Please fill out all the fields.";
+      if (errorText) errorText.innerText = "Please fill out all fields.";
       return;
     }
 
@@ -211,30 +212,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('preview-canvas');
     const photoDataUrl = canvas ? canvas.toDataURL('image/jpeg') : '';
 
-    const payload = {
-      fullName,
-      email,
-      phone,
-      industry,
-      selectedQuote: quotes[currentQuoteIndex].replace('\n', ' '),
-      photoData: photoDataUrl
-    };
+    // URLSearchParams sends data exactly like a traditional HTML form submission.
+    // This allows Zapier to read every single field reliably without CORS issues.
+    const formData = new URLSearchParams();
+    formData.append('fullName', fullName);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    formData.append('industry', industry);
+    formData.append('selectedQuote', quotes[currentQuoteIndex].replace('\n', ' '));
+    formData.append('photoData', photoDataUrl); 
 
     try {
+      // Send data to Zapier using standard form submission styling
       await fetch('https://hooks.zapier.com/hooks/catch/28241915/4u09yyd/', {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString()
       });
 
+      // Inject values to the digital badge screen
       document.getElementById('success-name').innerText = fullName;
       document.getElementById('success-industry').innerText = industry;
       
       navigateTo('screen-success');
     } catch (err) {
-      console.error(err);
-      alert("Network transmission failure. Reverting form control.");
+      console.error("Submission failed:", err);
+      alert("Submission encountered an error. Please try again.");
       navigateTo('screen-form');
     }
   });
