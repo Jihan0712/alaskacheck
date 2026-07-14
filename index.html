@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alaska Pro Photo Booth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="screen-landing" class="screen active">
+        <div class="screen-inner landing-screen">
+          <img src="assets/logo.png" alt="Alaska Pro logo" class="logo" />
+          <img src="reference/image.png" alt="Reference photo" class="hero-image" />
+          <h1>Alaska Pro Photo Booth</h1>
+          <p>Register for your professional photo booth session.</p>
+          <button id="start-registration" class="primary-btn">Start Registration</button>
+        </div>
+      </section>
+
+      <section id="screen-privacy" class="screen">
+        <div class="screen-inner privacy-screen">
+          <div class="privacy-card">
+            <h2>Privacy Notice</h2>
+            <p>
+              By continuing, you consent to use your camera and to share your photo and
+              contact details for registration.
+            </p>
+            <div class="button-row">
+              <button id="cancel-privacy" class="secondary-btn">CANCEL</button>
+              <button id="accept-privacy" class="primary-btn">ACCEPT</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-camera" class="screen">
+        <div class="screen-inner camera-screen">
+          <div class="top-bar">
+            <button id="back-camera" class="icon-btn">←</button>
+            <h2>Camera</h2>
+            <span class="badge">Live</span>
+          </div>
+          <div class="camera-stage">
+            <video id="camera-video" autoplay playsinline muted></video>
+            <div id="quote-overlay" class="quote-overlay"></div>
+            <div class="quote-controls">
+              <button id="prev-quote" class="icon-btn small">←</button>
+              <button id="next-quote" class="icon-btn small">→</button>
+            </div>
+          </div>
+          <p id="camera-status" class="status-text">Position yourself for the photo.</p>
+          <button id="capture-button" class="primary-btn capture-btn">Capture</button>
+        </div>
+      </section>
+
+      <section id="screen-preview" class="screen">
+        <div class="screen-inner preview-screen">
+          <h2>Preview</h2>
+          <canvas id="preview-canvas" class="preview-canvas"></canvas>
+          <div class="button-row">
+            <button id="retake-photo" class="secondary-btn">RETAKE</button>
+            <button id="use-photo" class="primary-btn">USE PHOTO</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-form" class="screen">
+        <div class="screen-inner form-screen">
+          <h2>Registration</h2>
+          <img id="photo-thumb" class="photo-thumb" alt="Captured photo preview" />
+          <p id="form-quote" class="form-quote"></p>
+          <form id="registration-form" novalidate>
+            <label>
+              Full Name
+              <input id="full-name" name="fullName" type="text" required />
+            </label>
+            <label>
+              Email
+              <input id="email" name="email" type="email" required />
+            </label>
+            <label>
+              Phone
+              <input id="phone" name="phone" type="tel" required />
+            </label>
+            <label>
+              Industry
+              <input id="industry" name="industry" type="text" required />
+            </label>
+            <p id="form-error" class="error-text" aria-live="polite"></p>
+            <button id="submit-form" class="primary-btn" type="submit">SUBMIT</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="screen-loading" class="screen">
+        <div class="screen-inner loading-screen">
+          <div class="spinner"></div>
+          <h2>Submitting</h2>
+          <p id="loading-message">Sending your registration now.</p>
+        </div>
+      </section>
+
+      <section id="screen-success" class="screen">
+        <div class="screen-inner success-screen">
+          <h2>Success</h2>
+          <img id="final-image" class="final-image" alt="Final photo" />
+          <div class="success-details">
+            <p id="success-name" class="success-name"></p>
+            <p id="success-industry" class="success-industry"></p>
+          </div>
+          <button id="restart-flow" class="primary-btn">Start Again</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

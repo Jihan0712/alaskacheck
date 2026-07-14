@@ -1,0 +1,488 @@
+/* --- Global Reset & Variables --- */
+:root {
+  --bg-primary: #0f2b5c;      /* Deep brand blue */
+  --bg-input: #1b3d7a;        /* Slightly lighter input blue */
+  --btn-accent: #ffffff;      /* Pure white for primary buttons */
+  --text-main: #ffffff;       /* Pure white text */
+  --text-blue: #0f2b5c;       /* Blue text inside white elements */
+  --danger-red: #c92a2a;      /* Red accent for privacy policy link */
+  --max-width: 412px;         /* Standard modern mobile layout aspect width */
+  --border-radius: 24px;      /* Rounded container curves from reference */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* Swapped default font out entirely for Rubik */
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: #111827;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--text-main);
+}
+
+/* --- App Frame Shell --- */
+.app-shell {
+  width: 100%;
+  max-width: var(--max-width);
+  height: 844px; /* Standard 19.5:9 mobile ratio height */
+  background-color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  border: 8px solid #1e3a8a;
+  border-radius: var(--border-radius);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* --- View Routing System --- */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+}
+
+.screen-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  position: relative;
+}
+
+/* --- Brand Typography & Elements --- */
+.logo {
+  width: 110px;
+  height: auto;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  z-index: 10;
+}
+
+h1, h2 {
+  font-weight: 700;
+  text-align: center;
+}
+
+/* --- Global Button Controls --- */
+.primary-btn {
+  width: 85%;
+  background-color: var(--btn-accent);
+  color: var(--text-blue);
+  border: none;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.1s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.primary-btn:active {
+  transform: scale(0.98);
+}
+
+.secondary-btn {
+  width: 85%;
+  background: transparent;
+  color: var(--text-main);
+  border: 2px solid var(--btn-accent);
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.button-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  margin-bottom: 20px;
+  z-index: 10;
+}
+
+/* --- Screen 1: Landing --- */
+.landing-screen {
+  justify-content: flex-start;
+}
+
+.hero-image {
+  width: 100%;
+  height: 55%;
+  object-fit: contain;
+  margin-bottom: auto;
+}
+
+.landing-screen h1, .landing-screen p {
+  display: none;
+}
+
+.landing-screen .primary-btn {
+  margin-bottom: 30px;
+}
+
+/* --- Screen 2: Privacy Modal --- */
+.privacy-screen {
+  background-color: rgba(15, 43, 92, 0.85);
+  justify-content: center;
+}
+
+.privacy-card {
+  background: white;
+  width: 90%;
+  border-radius: 16px;
+  padding: 28px 24px;
+  color: #1f2937;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.privacy-card h2 {
+  display: none;
+}
+
+.privacy-card p {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #0f2b5c;
+  margin-bottom: 24px;
+}
+
+.privacy-card p span.policy-link {
+  color: var(--danger-red);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.privacy-card .button-row {
+  margin-top: 0;
+  margin-bottom: 0;
+  gap: 10px;
+}
+
+.privacy-card .primary-btn {
+  width: 100%;
+  background-color: #25478a;
+  color: white;
+  border-radius: 8px;
+}
+
+.privacy-card .secondary-btn {
+  width: 100%;
+  border: 1px solid #25478a;
+  color: #25478a;
+  border-radius: 8px;
+}
+
+/* --- Screen 3: Camera Stage --- */
+.camera-screen {
+  padding: 0;
+}
+
+.camera-screen .top-bar {
+  display: none;
+}
+
+.camera-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+#camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Crop/Framing Guide brackets */
+.camera-stage::before {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  width: 70%;
+  height: 40%;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Red targeting brackets */
+.camera-stage::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  width: 70%;
+  height: 40%;
+  border: 4px solid transparent;
+  background: 
+    linear-gradient(to right, #ef4444 20px, transparent 20px) 0 0,
+    linear-gradient(to bottom, #ef4444 20px, transparent 20px) 0 0,
+    linear-gradient(to left, #ef4444 20px, transparent 20px) 100% 0,
+    linear-gradient(to bottom, #ef4444 20px, transparent 20px) 100% 0,
+    linear-gradient(to right, #ef4444 20px, transparent 20px) 0 100%,
+    linear-gradient(to top, #ef4444 20px, transparent 20px) 0 100%,
+    linear-gradient(to left, #ef4444 20px, transparent 20px) 100% 100%,
+    linear-gradient(to top, #ef4444 20px, transparent 20px) 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Dynamic Bold Typography Layout Layer */
+.quote-overlay {
+  position: absolute;
+  bottom: 160px;
+  left: 24px;
+  right: 24px;
+  color: white;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  white-space: pre-line;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.quote-controls {
+  position: absolute;
+  bottom: 175px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  z-index: 6;
+}
+
+.quote-controls .icon-btn {
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.camera-screen .status-text {
+  display: none;
+}
+
+/* Control Hub Overlay Bottom Placement */
+.capture-container {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  z-index: 10;
+}
+
+.capture-btn {
+  width: 72px !important;
+  height: 72px;
+  border-radius: 50% !important;
+  background: white;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  padding: 0;
+  cursor: pointer;
+}
+
+.side-control-btn {
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+}
+
+/* --- Screen 4: Preview --- */
+.preview-screen h2 {
+  display: none;
+}
+
+.preview-canvas {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  border-radius: 16px;
+  background-color: #000;
+  margin-top: 40px;
+}
+
+.download-link {
+  color: white;
+  font-size: 12px;
+  text-decoration: none;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Screen 5: Form Interface --- */
+.form-screen h2, .form-screen .form-quote {
+  display: none;
+}
+
+.photo-thumb {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-top: 24px;
+  margin-bottom: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#registration-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#registration-form label {
+  display: none;
+}
+
+.form-input {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  color: white;
+  font-size: 15px;
+  font-family: "Rubik", sans-serif; /* Explicit input text inheritance logic fix */
+}
+
+.form-input::placeholder {
+  color: #6b82ae;
+}
+
+.form-input:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.error-text {
+  color: #f87171;
+  font-size: 13px;
+  text-align: center;
+  min-height: 18px;
+}
+
+#registration-form .primary-btn, 
+#registration-form .secondary-btn {
+  width: 100%;
+}
+
+/* --- Screen 6: Loading State --- */
+.loading-screen {
+  justify-content: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Screen 7: Success Badge Display --- */
+.success-screen h2, #restart-flow {
+  display: none;
+}
+
+.final-image {
+  width: 100%;
+  height: 68%;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-top: 30px;
+}
+
+.success-details {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.success-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.success-industry {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  opacity: 0.9;
+}
+
+.footer-notice {
+  position: absolute;
+  bottom: 24px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  width: calc(100% - 48px);
+}
