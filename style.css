@@ -1,11 +1,11 @@
 :root {
-  --bg-primary: #254284;      /* Deep brand blue from mockups */
-  --bg-input: #29478f;        /* Lighter blue for inputs */
+  --bg-primary: #1c3570;      /* Replace this if you need to match your image exactly */
+  --bg-input: #29478f;
   --btn-white: #ffffff;
   --text-blue: #1c3570;
   --text-white: #ffffff;
   --danger-red: #d32f2f;
-  --max-width: 430px;
+  --max-width: 450px;         /* Max width for tablets/desktop view */
 }
 
 * {
@@ -21,19 +21,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100dvh; /* dvh fixes mobile address bar jumping */
   color: var(--text-white);
+  overflow: hidden; /* Prevents whole-page bouncing on iOS */
 }
 
 .app-shell {
   width: 100%;
   max-width: var(--max-width);
-  height: 100vh; 
-  max-height: 932px;
+  height: 100dvh; /* Fills exact screen height */
   background-color: var(--bg-primary);
   position: relative;
-  overflow: hidden;
   box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  overflow: hidden;
 }
 
 .screen {
@@ -49,23 +49,28 @@ body {
   opacity: 1;
 }
 
+/* Added overflow-y so small phones can scroll the form if needed */
 .screen-inner {
   width: 100%; height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 3vh 5vw; /* Scales padding based on screen size */
   position: relative;
+  overflow-y: auto; 
+  overflow-x: hidden;
 }
 
 .logo {
-  width: 140px;
+  width: 35%; /* Scales based on phone width */
+  max-width: 140px;
   object-fit: contain;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
   z-index: 10;
+  flex-shrink: 0;
 }
-.small-logo { width: 100px; margin-top: 10px; margin-bottom: 10px; }
+.small-logo { width: 25%; max-width: 100px; margin-top: 1vh; margin-bottom: 1vh; }
 
 /* Buttons */
 .primary-btn {
@@ -77,11 +82,12 @@ body {
   font-weight: 700;
   border-radius: 12px;
   cursor: pointer;
-  width: 85%;
+  width: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 .secondary-btn {
   background: transparent;
@@ -92,45 +98,52 @@ body {
   font-weight: 700;
   border-radius: 12px;
   cursor: pointer;
+  flex-shrink: 0;
 }
-.wide-btn { width: 100%; margin-bottom: 12px; }
+.wide-btn { width: 100%; margin-bottom: 1.5vh; }
 
 /* Screen 1 */
-.landing-screen { justify-content: space-between; padding-bottom: 40px; }
-.hero-image { width: 110%; height: 60%; object-fit: contain; margin-top: 20px; }
+.landing-screen { justify-content: flex-start; padding-bottom: 5vh; }
+.hero-image { 
+  width: 110%; 
+  flex-grow: 1;
+  max-height: 60vh; /* Prevents squishing on short phones */
+  object-fit: contain; 
+  margin-bottom: 3vh; 
+}
 
 /* Screen 2 */
 .privacy-screen { background-color: rgba(28, 53, 112, 0.6); justify-content: center; }
-.privacy-logo { position: absolute; top: 20px; opacity: 0.5; }
+.privacy-logo { position: absolute; top: 3vh; opacity: 0.5; }
 .privacy-card {
   background: white;
   width: 90%;
   border-radius: 16px;
-  padding: 30px 24px;
+  padding: 4vh 6vw;
   color: var(--text-blue);
   text-align: center;
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   z-index: 20;
 }
-.privacy-card p { font-size: 14px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; }
+.privacy-card p { font-size: 14px; font-weight: 500; margin-bottom: 3vh; line-height: 1.5; }
 .policy-link { color: var(--danger-red); text-decoration: underline; cursor: pointer; }
-.modal-primary-btn { width: 100%; background: #23428b; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; margin-bottom: 10px; cursor: pointer; }
+.modal-primary-btn { width: 100%; background: #23428b; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; margin-bottom: 1.5vh; cursor: pointer; }
 .modal-secondary-btn { width: 100%; background: white; color: #23428b; border: 1px solid #23428b; padding: 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
 /* Screen 3 */
-.camera-screen { padding: 0; }
-.camera-logo { position: absolute; top: 20px; z-index: 10; }
+.camera-screen { padding: 0; overflow: hidden; }
+.camera-logo { position: absolute; top: 3vh; z-index: 10; }
 .camera-stage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; }
 #camera-video { width: 100%; height: 100%; object-fit: cover; }
 
 .crop-guide {
-  position: absolute; top: 25%; left: 15%; width: 70%; height: 45%;
+  position: absolute; top: 20%; left: 10%; width: 80%; height: 45%;
   border: 2px dashed rgba(255, 255, 255, 0.4);
   box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.3);
   z-index: 2; pointer-events: none;
 }
 .red-brackets {
-  position: absolute; top: 25%; left: 15%; width: 70%; height: 45%;
+  position: absolute; top: 20%; left: 10%; width: 80%; height: 45%;
   background: 
     linear-gradient(to right, #d32f2f 20px, transparent 20px) 0 0,
     linear-gradient(to bottom, #d32f2f 20px, transparent 20px) 0 0,
@@ -143,17 +156,19 @@ body {
   background-repeat: no-repeat; background-size: 20px 20px;
   z-index: 3; pointer-events: none;
 }
+
+/* Using vh (viewport height) keeps the text and buttons safely above the bottom edge */
 .quote-overlay {
-  position: absolute; bottom: 150px; left: 20px; right: 20px;
-  color: white; font-size: 36px; font-weight: 800; line-height: 1.1;
+  position: absolute; bottom: 18vh; left: 5vw; right: 5vw;
+  color: white; font-size: clamp(24px, 8vw, 36px); font-weight: 800; line-height: 1.1;
   text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6); z-index: 5;
 }
 .capture-container {
-  position: absolute; bottom: 40px; width: 100%;
-  display: flex; justify-content: center; align-items: center; gap: 50px; z-index: 10;
+  position: absolute; bottom: 5vh; width: 100%;
+  display: flex; justify-content: center; align-items: center; gap: 10vw; z-index: 10;
 }
 .capture-btn {
-  width: 70px; height: 70px; border-radius: 50%;
+  width: 75px; height: 75px; border-radius: 50%;
   background: white; border: 4px solid rgba(255, 255, 255, 0.4); background-clip: padding-box; cursor: pointer;
 }
 .side-control-btn {
@@ -163,14 +178,26 @@ body {
 
 /* Screen 4 */
 .preview-canvas {
-  width: 100%; height: 65%; object-fit: cover; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  width: 100%; 
+  max-height: 55vh; /* Fits nicely without pushing buttons off screen */
+  object-fit: contain; 
+  border-radius: 20px; 
+  margin-bottom: 3vh; 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  background-color: #000;
 }
-.bottom-buttons { width: 90%; margin-top: auto; margin-bottom: 20px; }
-.download-link { color: white; font-size: 12px; font-weight: 500; text-decoration: none; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.bottom-buttons { width: 90%; margin-top: auto; margin-bottom: 2vh; display: flex; flex-direction: column; align-items: center; }
+.download-link { color: white; font-size: 12px; font-weight: 500; text-decoration: none; margin-top: 1.5vh; display: flex; align-items: center; gap: 8px; }
 
 /* Screen 5 */
-.photo-thumb { width: 180px; height: 180px; object-fit: cover; border-radius: 20px; margin-top: 10px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-#registration-form { width: 90%; display: flex; flex-direction: column; gap: 12px; }
+.photo-thumb { 
+  width: 35vw; max-width: 160px; 
+  aspect-ratio: 1/1; /* Keeps it a perfect square on any phone */
+  object-fit: cover; border-radius: 20px; 
+  margin-top: 1vh; margin-bottom: 3vh; 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+}
+#registration-form { width: 100%; display: flex; flex-direction: column; gap: 1.5vh; }
 .form-input {
   width: 100%; background-color: var(--bg-input); border: none; border-radius: 8px; padding: 18px; color: white; font-size: 15px; font-weight: 500;
 }
@@ -179,8 +206,24 @@ body {
 .error-text { color: #ff6b6b; font-size: 13px; text-align: center; min-height: 15px; }
 
 /* Screen 6 */
-.final-image { width: 90%; height: 60%; object-fit: cover; border-radius: 20px; margin-top: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-.success-details { margin-top: 25px; text-align: center; }
-.success-name { font-size: 32px; font-weight: 800; line-height: 1.2; }
+.final-image { 
+  width: 90%; 
+  max-height: 55vh; 
+  object-fit: contain; 
+  border-radius: 20px; 
+  margin-top: 1vh; 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+  background-color: #000;
+}
+.success-details { margin-top: 3vh; text-align: center; }
+.success-name { font-size: clamp(24px, 8vw, 32px); font-weight: 800; line-height: 1.2; }
 .success-industry { font-size: 16px; font-weight: 700; margin-top: 4px; }
-.footer-notice { position: absolute; bottom: 30px; font-size: 10px; font-weight: 500; opacity: 0.8; }
+.footer-notice { 
+  position: absolute; 
+  bottom: 3vh; 
+  font-size: 10px; 
+  font-weight: 500; 
+  opacity: 0.8; 
+  width: 100%;
+  text-align: center;
+}
