@@ -69,10 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 2. Canvas Image Processing (Fixes the "Squished" effect)
+// 2. Canvas Image Processing (With Mirror Fix)
   function capturePhoto() {
     const video = document.getElementById('camera-video');
-    const container = document.querySelector('.camera-stage'); // The exact visible area
+    const container = document.querySelector('.camera-stage'); 
     const canvas = document.getElementById('preview-canvas');
     if (!canvas || !video || !container) return;
 
@@ -88,30 +88,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const vidHeight = video.videoHeight;
     const vidRatio = vidWidth / vidHeight;
 
-    // Step C: Bulletproof Crop Math (Replicates CSS object-fit: cover perfectly)
+    // Step C: Bulletproof Crop Math 
     let sx = 0, sy = 0, sWidth = vidWidth, sHeight = vidHeight;
 
     if (vidRatio > viewRatio) {
-      // Video is wider than the screen view - crop left and right
       sWidth = vidHeight * viewRatio;
       sx = (vidWidth - sWidth) / 2;
     } else {
-      // Video is taller than the screen view - crop top and bottom
       sHeight = vidWidth / viewRatio;
       sy = (vidHeight - sHeight) / 2;
     }
 
-    // Step D: Set Canvas dimensions locking EXACTLY to the screen's aspect ratio
-    const exportWidth = 540; // Keeps file small for Zapier limit
+    // Step D: Set Canvas dimensions
+    const exportWidth = 540; 
     canvas.width = exportWidth;
-    canvas.height = exportWidth / viewRatio; // GUARANTEES no squishing
+    canvas.height = exportWidth / viewRatio; 
 
-    // Step E: Draw the exact cropped box to the exact canvas box
+    // --- NEW FLIP LOGIC STARTS HERE ---
+    // Flip the canvas context horizontally so the photo matches the mirrored preview
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+
+    // Draw the exact cropped box
     ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+
+    // Reset the canvas transform back to normal so our text doesn't write backward!
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    // --- NEW FLIP LOGIC ENDS HERE ---
 
     // Apply Typography
     ctx.fillStyle = "white";
-    // Scale font size dynamically based on canvas width
     const fontSize = Math.floor(canvas.width * 0.075);
     ctx.font = `800 ${fontSize}px 'Rubik', sans-serif`;
     ctx.textAlign = "left";
@@ -122,6 +128,27 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.shadowOffsetY = 4;
 
     const lines = quotes[currentQuoteIndex].split('\n');
+    
+    let yOffset = canvas.height * 0.80; 
+    lines.forEach(line => {
+      ctx.fillText(line, 30, yOffset);
+      yOffset += (fontSize + 6);
+    });
+
+    ctx.shadowBlur = 0;
+
+    // Export compressed JPEG
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
+    
+    document.getElementById('photo-thumb').src = dataUrl;
+    document.getElementById('final-image').src = dataUrl;
+    
+    const dlLink = document.getElementById('dl-link');
+    dlLink.href = dataUrl;
+    dlLink.download = 'Alaska_Pro_Badge.jpg';
+
+    navigateTo('screen-preview');
+  }
     
     // Position text dynamically based on the exact canvas height (approx 80% down the screen)
     let yOffset = canvas.height * 0.80; 

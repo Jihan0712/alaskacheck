@@ -57,8 +57,7 @@ body {
   align-items: center;
   padding: 3vh 5vw; /* Scales padding based on screen size */
   position: relative;
-  overflow-y: auto; 
-  overflow-x: hidden;
+  overflow: hidden; /* Change this from auto to hidden by default */
 }
 
 .logo {
@@ -134,7 +133,12 @@ body {
 .camera-screen { padding: 0; overflow: hidden; }
 .camera-logo { position: absolute; top: 3vh; z-index: 10; }
 .camera-stage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; }
-#camera-video { width: 100%; height: 100%; object-fit: cover; }
+#camera-video { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  transform: scaleX(-1); /* This mirrors the live video feed */
+}
 
 .crop-guide {
   position: absolute; top: 20%; left: 10%; width: 80%; height: 45%;
@@ -226,4 +230,33 @@ body {
   opacity: 0.8; 
   width: 100%;
   text-align: center;
+}
+
+
+/* Allow vertical scrolling ONLY on the form registration screen */
+#screen-form .screen-inner {
+  overflow-y: auto;
+}
+
+/* Ensure the canvas scale stays strictly within bounds */
+.preview-canvas {
+  width: 90%; 
+  max-height: 50vh; /* Scaled down slightly from 60vh to guarantee no overflow */
+  object-fit: contain; 
+  border-radius: 20px; 
+  margin-bottom: 2vh; 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  background-color: #000;
+  flex-shrink: 0; /* Prevents canvas from trying to push buttons down */
+}
+
+/* Ensure the buttons and links align neatly inside the remaining height */
+.bottom-buttons { 
+  width: 90%; 
+  margin-top: auto; 
+  margin-bottom: 2vh; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  flex-shrink: 0;
 }
