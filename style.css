@@ -182,13 +182,15 @@ body {
 
 /* Screen 4 */
 .preview-canvas {
-  width: 90%; 
-  max-height: 60vh; /* Lets the image size itself naturally */
-  object-fit: contain; /* Prevents squishing */
+  max-width: 90%;       /* Keeps it from touching the screen edges */
+  max-height: 50vh;     /* Keeps it from pushing buttons off the bottom */
+  width: auto;          /* Hugs the exact width of the photo */
+  height: auto;         /* Hugs the exact height of the photo */
   border-radius: 20px; 
-  margin-bottom: 3vh; 
+  margin-bottom: 2vh; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  background-color: #000;
+  flex-shrink: 0;
+  /* Removed: background-color and object-fit */
 }
 .bottom-buttons { width: 90%; margin-top: auto; margin-bottom: 2vh; display: flex; flex-direction: column; align-items: center; }
 .download-link { color: white; font-size: 12px; font-weight: 500; text-decoration: none; margin-top: 1.5vh; display: flex; align-items: center; gap: 8px; }
@@ -211,13 +213,15 @@ body {
 
 /* Screen 6 */
 .final-image { 
-  width: 90%; 
-  max-height: 60vh; 
-  object-fit: contain; /* Prevents squishing */
+  max-width: 90%; 
+  max-height: 55vh; 
+  width: auto;          /* Hugs the exact width of the photo */
+  height: auto;         /* Hugs the exact height of the photo */
   border-radius: 20px; 
   margin-top: 1vh; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
-  background-color: #000;
+  flex-shrink: 0;
+  /* Removed: background-color and object-fit */
 }
 .success-details { margin-top: 3vh; text-align: center; }
 .success-name { font-size: clamp(24px, 8vw, 32px); font-weight: 800; line-height: 1.2; }
