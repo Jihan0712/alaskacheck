@@ -47,58 +47,75 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('quote-overlay').innerHTML = quotes[currentQuoteIndex].replace('\n', '<br>');
   }
 
-// Canvas Image Processing & Compression (WYSIWYG Fix)
+// 1. Camera Management (Fixes the "Zoomed In" effect)
+  async function initCamera() {
+    try {
+      // Calculate the physical screen ratio of the user's specific phone
+      const screenRatio = window.innerHeight / window.innerWidth;
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: "user", 
+          // Ask the camera hardware to pre-crop to a tall lens natively!
+          aspectRatio: { ideal: screenRatio }, 
+          width: { ideal: 1080 } 
+        },
+        audio: false
+      });
+      document.getElementById('camera-video').srcObject = stream;
+    } catch (err) {
+      console.error("Camera access error:", err);
+      alert("Unable to access camera. Please check browser permissions.");
+    }
+  }
+
+  // 2. Canvas Image Processing (Fixes the "Squished" effect)
   function capturePhoto() {
     const video = document.getElementById('camera-video');
+    const container = document.querySelector('.camera-stage'); // The exact visible area
     const canvas = document.getElementById('preview-canvas');
-    if (!canvas || !video) return;
+    if (!canvas || !video || !container) return;
 
     const ctx = canvas.getContext('2d');
-    
-    // 1. Get the actual raw dimensions of the camera feed
-    const rawVideoWidth = video.videoWidth;
-    const rawVideoHeight = video.videoHeight;
 
-    // 2. Get the dimensions of the screen the user is looking at
-    const screenWidth = video.clientWidth;
-    const screenHeight = video.clientHeight;
+    // Step A: Get exact visible screen dimensions
+    const viewWidth = container.clientWidth;
+    const viewHeight = container.clientHeight;
+    const viewRatio = viewWidth / viewHeight;
 
-    // 3. Calculate aspect ratios
-    const videoRatio = rawVideoWidth / rawVideoHeight;
-    const screenRatio = screenWidth / screenHeight;
+    // Step B: Get raw hardware camera dimensions
+    const vidWidth = video.videoWidth;
+    const vidHeight = video.videoHeight;
+    const vidRatio = vidWidth / vidHeight;
 
-    let sourceX = 0, sourceY = 0, sourceWidth = rawVideoWidth, sourceHeight = rawVideoHeight;
+    // Step C: Bulletproof Crop Math (Replicates CSS object-fit: cover perfectly)
+    let sx = 0, sy = 0, sWidth = vidWidth, sHeight = vidHeight;
 
-    // 4. Calculate the EXACT crop to mimic CSS `object-fit: cover`
-    if (videoRatio > screenRatio) {
-      // The video is wider than the screen (crop the sides)
-      sourceWidth = rawVideoHeight * screenRatio;
-      sourceX = (rawVideoWidth - sourceWidth) / 2;
+    if (vidRatio > viewRatio) {
+      // Video is wider than the screen view - crop left and right
+      sWidth = vidHeight * viewRatio;
+      sx = (vidWidth - sWidth) / 2;
     } else {
-      // The video is taller than the screen (crop the top and bottom)
-      sourceHeight = rawVideoWidth / screenRatio;
-      sourceY = (rawVideoHeight - sourceHeight) / 2;
+      // Video is taller than the screen view - crop top and bottom
+      sHeight = vidWidth / viewRatio;
+      sy = (vidHeight - sHeight) / 2;
     }
 
-    // 5. Set output resolution. 
-    // We scale it down slightly for Zapier/GSheets, but keep the EXACT aspect ratio of the screen.
-    const exportWidth = 600; 
+    // Step D: Set Canvas dimensions locking EXACTLY to the screen's aspect ratio
+    const exportWidth = 540; // Keeps file small for Zapier limit
     canvas.width = exportWidth;
-    canvas.height = exportWidth / screenRatio;
+    canvas.height = exportWidth / viewRatio; // GUARANTEES no squishing
 
-    // 6. Draw only the cropped, visible area onto the canvas
-    ctx.drawImage(
-      video, 
-      sourceX, sourceY, sourceWidth, sourceHeight, // What to crop from the raw video
-      0, 0, canvas.width, canvas.height            // Where to draw it on the canvas
-    );
+    // Step E: Draw the exact cropped box to the exact canvas box
+    ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
     // Apply Typography
     ctx.fillStyle = "white";
-    ctx.font = "800 38px 'Rubik', sans-serif";
+    // Scale font size dynamically based on canvas width
+    const fontSize = Math.floor(canvas.width * 0.075);
+    ctx.font = `800 ${fontSize}px 'Rubik', sans-serif`;
     ctx.textAlign = "left";
     
-    // Text Shadow for readability
     ctx.shadowColor = "rgba(0,0,0,0.6)";
     ctx.shadowBlur = 10;
     ctx.shadowOffsetX = 0;
@@ -106,12 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const lines = quotes[currentQuoteIndex].split('\n');
     
-    // Dynamically position text based on the new canvas height
-    let yOffset = canvas.height - (canvas.height * 0.15); 
-    
+    // Position text dynamically based on the exact canvas height (approx 80% down the screen)
+    let yOffset = canvas.height * 0.80; 
     lines.forEach(line => {
       ctx.fillText(line, 30, yOffset);
-      yOffset += 45;
+      yOffset += (fontSize + 6);
     });
 
     ctx.shadowBlur = 0;
