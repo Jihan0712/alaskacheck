@@ -264,3 +264,19 @@ body {
   align-items: center;
   flex-shrink: 0;
 }
+
+/* --- STRICT OVERRIDES TO REMOVE BLACK SIDEBARS --- */
+.preview-canvas, 
+.final-image {
+  background-color: transparent !important; /* Forces the black background to disappear */
+  width: auto !important;                   /* Forces the box to hug the sides of the photo */
+  height: auto !important;                  
+  max-width: 85vw !important;               /* Prevents it from touching the screen edges */
+  max-height: 55vh !important;              /* Prevents it from pushing buttons off the screen */
+  object-fit: cover !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+}
