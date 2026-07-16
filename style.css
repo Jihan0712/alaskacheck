@@ -178,9 +178,9 @@ body {
 
 /* Screen 4 */
 .preview-canvas {
-  width: 100%; 
-  max-height: 55vh; /* Fits nicely without pushing buttons off screen */
-  object-fit: contain; 
+  width: 90%; 
+  max-height: 60vh; /* Lets the image size itself naturally */
+  object-fit: contain; /* Prevents squishing */
   border-radius: 20px; 
   margin-bottom: 3vh; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.3);
@@ -208,8 +208,8 @@ body {
 /* Screen 6 */
 .final-image { 
   width: 90%; 
-  max-height: 55vh; 
-  object-fit: contain; 
+  max-height: 60vh; 
+  object-fit: contain; /* Prevents squishing */
   border-radius: 20px; 
   margin-top: 1vh; 
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
