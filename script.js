@@ -149,28 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     navigateTo('screen-preview');
   }
-    
-    // Position text dynamically based on the exact canvas height (approx 80% down the screen)
-    let yOffset = canvas.height * 0.80; 
-    lines.forEach(line => {
-      ctx.fillText(line, 30, yOffset);
-      yOffset += (fontSize + 6);
-    });
-
-    ctx.shadowBlur = 0;
-
-    // Export compressed JPEG
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
-    
-    document.getElementById('photo-thumb').src = dataUrl;
-    document.getElementById('final-image').src = dataUrl;
-    
-    const dlLink = document.getElementById('dl-link');
-    dlLink.href = dataUrl;
-    dlLink.download = 'Alaska_Pro_Badge.jpg';
-
-    navigateTo('screen-preview');
-  }
 
   // Event Listeners
   document.getElementById('start-registration').addEventListener('click', () => navigateTo('screen-privacy'));
