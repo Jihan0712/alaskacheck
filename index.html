@@ -79,10 +79,40 @@
       <div class="screen-inner form-screen">
         <img id="photo-thumb" class="photo-thumb" alt="Captured photo preview" />
         <form id="registration-form" novalidate>
-          <input type="text" id="full-name" name="fullName" class="form-input" placeholder="Full Name" required />
-          <input type="email" id="email" name="email" class="form-input" placeholder="Email Address" required />
-          <input type="tel" id="phone" name="phone" class="form-input" placeholder="Phone Number" required />
-          <input type="text" id="industry" name="industry" class="form-input" placeholder="Industry" required />
+          <input type="text" id="full-name" class="form-input" placeholder="Name" required />
+          
+          <select id="position" class="form-input" required>
+            <option value="" disabled selected>Position</option>
+            <option value="Owner">Owner</option>
+            <option value="Chef">Chef</option>
+            <option value="Kitchen/Bar Staff">Kitchen/Bar Staff</option>
+            <option value="R&D">R&D</option>
+            <option value="Barista">Barista</option>
+            <option value="Procurement">Procurement</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <input type="text" id="business-name" class="form-input" placeholder="Name of Business" required />
+
+          <select id="food-service-channel" class="form-input" required>
+            <option value="" disabled selected>Type of Food Service Channel</option>
+            <option value="FSR">FSR</option>
+            <option value="QSR">QSR</option>
+            <option value="C&T">C&T</option>
+            <option value="Bakery">Bakery</option>
+          </select>
+
+          <input type="text" id="top-dish" class="form-input" placeholder="Top dish / best seller" required />
+
+          <select id="alaska-user" class="form-input" required>
+            <option value="" disabled selected>User or non user of Alaska?</option>
+            <option value="User">User</option>
+            <option value="Non-User">Non-User</option>
+          </select>
+
+          <input type="text" id="business-address" class="form-input" placeholder="Business Address" required />
+          <input type="tel" id="contact-number" class="form-input" placeholder="Contact Number" required />
+
           <p id="form-error" class="error-text"></p>
           <div class="button-row">
             <button id="submit-form" class="primary-btn wide-btn" type="submit">SUBMIT</button>
