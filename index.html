@@ -23,7 +23,7 @@
       <div class="screen-inner landing-screen">
         <img src="assets/logo.png" alt="Alaska Pro logo" class="logo" />
         <img src="assets/landing-hero.png" alt="Chefs" class="hero-image" onerror="this.src='https://via.placeholder.com/350x450/1c3570/ffffff?text=Hero+Image'" />
-        <button id="start-registration" class="primary-btn">
+        <button id="start-registration" class="primary-btn" onclick="navigateTo('screen-privacy')">
           <i class="fa-solid fa-camera"></i> Start Registration
         </button>
       </div>
@@ -34,11 +34,25 @@
       <div class="screen-inner privacy-screen">
         <img src="assets/logo.png" alt="Alaska Pro logo" class="logo privacy-logo" />
         <div class="privacy-card">
-          <p>By continuing, you agree to our <span class="policy-link">Privacy Policy</span> and consent to the use of your photo for this event.</p>
+          <p>By continuing, you agree to our <span class="policy-link" onclick="navigateTo('screen-policy-text')" style="text-decoration: underline; cursor: pointer;">Privacy Policy</span> and consent to the use of your photo for this event.</p>
           <div class="button-row">
-            <button id="accept-privacy" class="modal-primary-btn">ACCEPT</button>
-            <button id="cancel-privacy" class="modal-secondary-btn">CANCEL</button>
+            <button id="accept-privacy" class="modal-primary-btn" onclick="startExperience()">ACCEPT</button>
+            <button id="cancel-privacy" class="modal-secondary-btn" onclick="navigateTo('screen-landing')">CANCEL</button>
           </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SCREEN 2.5: PRIVACY TEXT -->
+    <section id="screen-policy-text" class="screen">
+      <div class="screen-inner">
+        <h2>Privacy Policy</h2>
+        <div style="flex-grow: 1; overflow-y: auto; text-align: left; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 20px;">
+          <p>Insert your full privacy policy text here...</p>
+          <p>We collect your photo and data solely for the purpose of the event. Data will be handled in accordance with the Data Privacy Act of 2012.</p>
+        </div>
+        <div class="bottom-buttons">
+          <button class="primary-btn wide-btn" onclick="navigateTo('screen-privacy')">GO BACK</button>
         </div>
       </div>
     </section>
@@ -55,7 +69,7 @@
         </div>
         <div class="capture-container">
           <button type="button" id="prev-quote" class="side-control-btn"><i class="fa-solid fa-chevron-left"></i></button>
-          <button type="button" id="real-capture-btn" class="capture-btn"></button>
+          <button type="button" id="real-capture-btn" class="capture-btn" onclick="capturePhoto()"></button>
           <button type="button" id="next-quote" class="side-control-btn"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
       </div>
@@ -67,17 +81,18 @@
         <img src="assets/logo.png" alt="Alaska Pro logo" class="logo small-logo" />
         <canvas id="preview-canvas" class="preview-canvas"></canvas>
         <div class="button-row bottom-buttons">
-          <button id="use-photo" class="primary-btn wide-btn">USE PHOTO</button>
-          <button id="retake-photo" class="secondary-btn wide-btn">RETAKE</button>
+          <button id="use-photo" class="primary-btn wide-btn" onclick="navigateTo('screen-form')">USE PHOTO</button>
+          <button id="retake-photo" class="secondary-btn wide-btn" onclick="retakePhoto()">RETAKE</button>
           <a id="dl-link" href="#" class="download-link"><i class="fa-solid fa-download"></i> DOWNLOAD PHOTO</a>
         </div>
       </div>
     </section>
 
     <!-- SCREEN 5: FORM -->
-    <section id="screen-form" class="screen">
-      <div class="screen-inner form-screen">
-        <img id="photo-thumb" class="photo-thumb" alt="Captured photo preview" />
+<section id="screen-form" class="screen">
+      <div class="screen-inner">
+        <h2>Registration</h2>
+        
         <form id="registration-form" novalidate>
           <input type="text" id="full-name" class="form-input" placeholder="Name" required />
           
@@ -114,9 +129,9 @@
           <input type="tel" id="contact-number" class="form-input" placeholder="Contact Number" required />
 
           <p id="form-error" class="error-text"></p>
-          <div class="button-row">
+          <div class="button-row bottom-buttons">
             <button id="submit-form" class="primary-btn wide-btn" type="submit">SUBMIT</button>
-            <button type="button" id="form-retake-btn" class="secondary-btn wide-btn">RETAKE</button>
+            <button type="button" id="form-retake-btn" class="secondary-btn wide-btn" onclick="retakePhoto()">RETAKE</button>
           </div>
         </form>
       </div>
@@ -132,6 +147,9 @@
           <p id="success-industry" class="success-industry">Alab Resto</p>
         </div>
         <p class="footer-notice">Show this screen to the organizer to get your free taste</p>
+        <div class="button-row bottom-buttons">
+        <button class="secondary-btn wide-btn" onclick="resetApp()">NEXT USER</button>
+        </div>
       </div>
     </section>
 
