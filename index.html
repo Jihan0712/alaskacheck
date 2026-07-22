@@ -137,18 +137,25 @@
       </div>
     </section>
 
-    <!-- SCREEN 6: SUCCESS -->
+<!-- SCREEN 6: SUCCESS -->
     <section id="screen-success" class="screen">
-      <div class="screen-inner success-screen">
-        <img src="assets/logo.png" alt="Alaska Pro logo" class="logo small-logo" />
-        <img id="final-image" class="final-image" alt="Final photo" />
+      <div class="screen-inner">
+        <img src="logo.png" alt="Alaska Pro Logo" class="logo small-logo" />
+        
+        <img id="final-image" class="final-image" />
+        
         <div class="success-details">
-          <p id="success-name" class="success-name">Rico Dizon</p>
-          <p id="success-industry" class="success-industry">Alab Resto</p>
+          <div id="success-name" class="success-name"></div>
+          <div id="success-industry" class="success-industry"></div>
         </div>
-        <p class="footer-notice">Show this screen to the organizer to get your free taste</p>
-        <div class="button-row bottom-buttons">
-        <button class="secondary-btn wide-btn" onclick="resetApp()">NEXT USER</button>
+          
+        <!-- Pushed naturally to the bottom -->
+        <div class="bottom-buttons">
+          <!-- Added the 'dual-line-btn' class -->
+          <button class="secondary-btn wide-btn dual-line-btn" id="next-user" onclick="resetApp()">
+            <span>NEXT USER</span>
+            <span class="btn-subtext">Show this screen to the organizer to get your free taste</span>
+          </button>
         </div>
       </div>
     </section>

@@ -259,9 +259,9 @@ if (form) {
     };
 
     try {
-      // Your specific working Google Apps Script URL
-      const googleScriptUrl = 'https://script.google.com/macros/s/AKfycby95Bw1OyonINjElB40R0yblyX8A_vqiAD_h3fhOrYyNwhznz0P6gEgOQ9t9_-fEWw/exec'; 
-
+      const hiddenEndpoint = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5OTVCdzFPeW9uSU5qRWxCNDBSMHlibHlYOEFfdnFpQURfaDNmaE9yWXlOd2h6bnowUDZnRWdPUTl0OV8tZkVXdy9leGVj";
+      const googleScriptUrl = atob(hiddenEndpoint);
+      
       const response = await fetch(googleScriptUrl, {
         method: 'POST',
         headers: { 
