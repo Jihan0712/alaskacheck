@@ -25,8 +25,12 @@ function startExperience() {
 }
 
 function resetApp() {
-  document.getElementById('registration-form').reset();
-  document.getElementById('form-error').innerText = "";
+  const formElement = document.getElementById('registration-form');
+  if(formElement) formElement.reset();
+  
+  const errorElement = document.getElementById('form-error');
+  if(errorElement) errorElement.innerText = "";
+  
   navigateTo('screen-landing');
   stopCamera();
 }
@@ -101,7 +105,8 @@ async function initCamera() {
       },
       audio: false
     });
-    document.getElementById('camera-video').srcObject = stream;
+    const videoObj = document.getElementById('camera-video');
+    if (videoObj) videoObj.srcObject = stream;
   } catch (err) {
     console.error("Camera access error:", err);
     alert("Unable to access camera. Please check browser permissions.");
@@ -118,23 +123,29 @@ function stopCamera() {
 // --- 6. Canvas Image Capture & Processing ---
 function capturePhoto() {
   const video = document.getElementById('camera-video');
-  const container = document.querySelector('.camera-stage'); 
   const canvas = document.getElementById('preview-canvas');
+  const container = document.querySelector('.camera-stage'); 
+  
   if (!canvas || !video || !container) return;
 
   const ctx = canvas.getContext('2d');
 
-  // Exact visible dimensions
-  const viewWidth = container.clientWidth;
-  const viewHeight = container.clientHeight;
+  // If a mobile browser incorrectly reports a height/width of 0, it falls back to the exact window size.
+  const viewWidth = (container.clientWidth > 0) ? container.clientWidth : window.innerWidth;
+  const viewHeight = (container.clientHeight > 0) ? container.clientHeight : window.innerHeight;
   const viewRatio = viewWidth / viewHeight;
 
-  // Raw hardware dimensions
   const vidWidth = video.videoWidth;
   const vidHeight = video.videoHeight;
+  
+  if (vidWidth === 0 || vidHeight === 0) {
+    alert("Camera is loading, please try again in a second.");
+    return;
+  }
+
   const vidRatio = vidWidth / vidHeight;
 
-  // Crop math
+  // Bulletproof crop math
   let sx = 0, sy = 0, sWidth = vidWidth, sHeight = vidHeight;
 
   if (vidRatio > viewRatio) {
@@ -145,7 +156,7 @@ function capturePhoto() {
     sy = (vidHeight - sHeight) / 2;
   }
 
-  // Set export size
+  // Lock Canvas mathematically to the screen shape
   const exportWidth = 540; 
   canvas.width = exportWidth;
   canvas.height = exportWidth / viewRatio; 
@@ -164,10 +175,10 @@ function capturePhoto() {
   ctx.font = `800 ${fontSize}px 'Rubik', sans-serif`;
   ctx.textAlign = "left";
   
-  ctx.shadowColor = "rgba(0,0,0,0.6)";
-  ctx.shadowBlur = 10;
+  ctx.shadowColor = "rgba(0,0,0,0.8)";
+  ctx.shadowBlur = 8;
   ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 4;
+  ctx.shadowOffsetY = 3;
 
   const lines = quotes[currentQuoteIndex].split('\n');
   let yOffset = canvas.height * 0.80; 
@@ -179,7 +190,7 @@ function capturePhoto() {
   ctx.shadowBlur = 0;
 
   // Export base64 image and inject it into preview and download link
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.8); 
   
   const finalImg = document.getElementById('final-image');
   if (finalImg) finalImg.src = dataUrl;
@@ -193,7 +204,13 @@ function capturePhoto() {
   navigateTo('screen-preview');
 }
 
-// --- 7. Form Submission (Google Apps Script API) ---
+// --- 7. Download Helper (If needed for inline onclick) ---
+function downloadPhoto() {
+  const dlLink = document.getElementById('dl-link');
+  if(dlLink && dlLink.href) dlLink.click();
+}
+
+// --- 8. Form Submission (Google Apps Script API) ---
 const form = document.getElementById('registration-form');
 if (form) {
   form.addEventListener('submit', async (e) => {
@@ -242,8 +259,8 @@ if (form) {
     };
 
     try {
-      // ⚠️ REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
-      const googleScriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; 
+      // Your specific working Google Apps Script URL
+      const googleScriptUrl = 'https://script.google.com/macros/s/AKfycby95Bw1OyonINjElB40R0yblyX8A_vqiAD_h3fhOrYyNwhznz0P6gEgOQ9t9_-fEWw/exec'; 
 
       const response = await fetch(googleScriptUrl, {
         method: 'POST',
