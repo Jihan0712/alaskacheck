@@ -1,11 +1,18 @@
-// --- 1. Global State & Setup ---
+// --- 1. Global State & Quotes Array ---
 let stream = null;
 let currentQuoteIndex = 0;
+
+// The requested quotes formatted with \n to split them into two lines on the canvas
 const quotes = [
-  "I am pro.\nI am Alaska Pro." // Matches your screenshot text layout
+  "I am pro.\nI am Alaska Pro.",
+  "I am pro versatility.\nI am Alaska Pro.",
+  "I am pro craft.\nI am Alaska Pro.",
+  "I am pro quality.\nI am Alaska Pro.",
+  "I am pro sarap.\nI am Alaska Pro.",
+  "I am pro success.\nI am Alaska Pro."
 ];
 
-// --- 2. Navigation Functions ---
+// --- 2. Navigation & App Setup ---
 function navigateTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
@@ -14,6 +21,7 @@ function navigateTo(screenId) {
 function startExperience() {
   navigateTo('screen-camera');
   initCamera();
+  updateQuoteOverlay(); // Ensure the text overlay is visible as soon as the camera turns on
 }
 
 function resetApp() {
@@ -28,7 +36,60 @@ function retakePhoto() {
   if (!stream) initCamera();
 }
 
-// --- 3. Camera Management ---
+// --- 3. Event Listeners (Connects your HTML IDs to the logic) ---
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Screen 1: Landing
+  const startBtn = document.getElementById('start-registration');
+  if (startBtn) startBtn.addEventListener('click', () => navigateTo('screen-privacy'));
+
+  // Screen 2: Privacy Modal
+  const acceptBtn = document.getElementById('accept-privacy');
+  if (acceptBtn) acceptBtn.addEventListener('click', startExperience);
+  
+  const cancelBtn = document.getElementById('cancel-privacy');
+  if (cancelBtn) cancelBtn.addEventListener('click', () => navigateTo('screen-landing'));
+
+  // Screen 3: Camera
+  const captureBtn = document.getElementById('real-capture-btn');
+  if (captureBtn) captureBtn.addEventListener('click', capturePhoto);
+
+  const nextQuoteBtn = document.getElementById('next-quote');
+  if (nextQuoteBtn) {
+    nextQuoteBtn.addEventListener('click', () => {
+      // Move to the next quote, loop back to the start if at the end
+      currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+      updateQuoteOverlay();
+    });
+  }
+
+  const prevQuoteBtn = document.getElementById('prev-quote');
+  if (prevQuoteBtn) {
+    prevQuoteBtn.addEventListener('click', () => {
+      // Move to the previous quote, loop to the end if at the start
+      currentQuoteIndex = (currentQuoteIndex - 1 + quotes.length) % quotes.length;
+      updateQuoteOverlay();
+    });
+  }
+
+  // Screen 4: Preview
+  const usePhotoBtn = document.getElementById('use-photo');
+  if (usePhotoBtn) usePhotoBtn.addEventListener('click', () => navigateTo('screen-form'));
+
+  const retakeBtn = document.getElementById('retake-photo');
+  if (retakeBtn) retakeBtn.addEventListener('click', retakePhoto);
+});
+
+// --- 4. Quote Overlay UI Update ---
+function updateQuoteOverlay() {
+  const overlay = document.getElementById('quote-overlay');
+  if (overlay) {
+    // Replaces \n with an HTML <br> tag for the screen display
+    overlay.innerHTML = quotes[currentQuoteIndex].replace('\n', '<br>');
+  }
+}
+
+// --- 5. Camera Management ---
 async function initCamera() {
   try {
     const screenRatio = window.innerHeight / window.innerWidth;
@@ -54,7 +115,7 @@ function stopCamera() {
   }
 }
 
-// --- 4. Canvas Image Processing (With Mirror, Zoom, & Squish Fixes) ---
+// --- 6. Canvas Image Capture & Processing ---
 function capturePhoto() {
   const video = document.getElementById('camera-video');
   const container = document.querySelector('.camera-stage'); 
@@ -73,7 +134,7 @@ function capturePhoto() {
   const vidHeight = video.videoHeight;
   const vidRatio = vidWidth / vidHeight;
 
-  // Bulletproof crop math
+  // Crop math
   let sx = 0, sy = 0, sWidth = vidWidth, sHeight = vidHeight;
 
   if (vidRatio > viewRatio) {
@@ -84,16 +145,14 @@ function capturePhoto() {
     sy = (vidHeight - sHeight) / 2;
   }
 
-  // Lock Canvas mathematically to the screen shape
+  // Set export size
   const exportWidth = 540; 
   canvas.width = exportWidth;
   canvas.height = exportWidth / viewRatio; 
 
-  // Flip canvas horizontally so photo matches the mirrored preview
+  // Mirror the image horizontally
   ctx.translate(canvas.width, 0);
   ctx.scale(-1, 1);
-
-  // Draw the image
   ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
   // Reset transform so text writes forward
@@ -119,14 +178,14 @@ function capturePhoto() {
 
   ctx.shadowBlur = 0;
 
-  // Export base64 image
+  // Export base64 image and inject it into preview and download link
   const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
   
   const finalImg = document.getElementById('final-image');
-  if(finalImg) finalImg.src = dataUrl;
+  if (finalImg) finalImg.src = dataUrl;
   
   const dlLink = document.getElementById('dl-link');
-  if(dlLink) {
+  if (dlLink) {
     dlLink.href = dataUrl;
     dlLink.download = 'Alaska_Pro_Badge.jpg';
   }
@@ -134,86 +193,84 @@ function capturePhoto() {
   navigateTo('screen-preview');
 }
 
-// --- 5. Download Helper ---
-function downloadPhoto() {
-  const dlLink = document.getElementById('dl-link');
-  if(dlLink && dlLink.href) dlLink.click();
-}
-
-// --- 6. Form Submission (Google Apps Script API) ---
-document.getElementById('registration-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  // Collect data
-  const fullName = document.getElementById('full-name').value.trim();
-  const position = document.getElementById('position').value;
-  const businessName = document.getElementById('business-name').value.trim();
-  const foodServiceChannel = document.getElementById('food-service-channel').value;
-  const topDish = document.getElementById('top-dish').value.trim();
-  const alaskaUser = document.getElementById('alaska-user').value;
-  const businessAddress = document.getElementById('business-address').value.trim();
-  const contactNumber = document.getElementById('contact-number').value.trim();
-  
-  const errorText = document.getElementById('form-error');
-  const submitBtn = document.getElementById('submit-form');
-
-  // Validate
-  if (!fullName || !position || !businessName || !foodServiceChannel || !topDish || !alaskaUser || !businessAddress || !contactNumber) {
-    errorText.innerText = "Please fill out all fields.";
-    return;
-  }
-  
-  errorText.innerText = "";
-  
-  // Loading State
-  const originalBtnText = submitBtn.innerText;
-  submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
-  submitBtn.disabled = true;
-
-  // Grab the compressed image
-  const photoDataUrl = document.getElementById('preview-canvas').toDataURL('image/jpeg', 0.5);
-
-  const scriptPayload = {
-    fullName: fullName,
-    position: position,
-    businessName: businessName,
-    foodServiceChannel: foodServiceChannel,
-    topDish: topDish,
-    alaskaUser: alaskaUser,
-    businessAddress: businessAddress,
-    contactNumber: contactNumber,
-    selectedQuote: quotes[currentQuoteIndex].replace('\n', ' '),
-    photoData: photoDataUrl
-  };
-
-  try {
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycby95Bw1OyonINjElB40R0yblyX8A_vqiAD_h3fhOrYyNwhznz0P6gEgOQ9t9_-fEWw/exec'; 
-
-    const response = await fetch(googleScriptUrl, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'text/plain;charset=utf-8', 
-      },
-      body: JSON.stringify(scriptPayload)
-    });
-
-    const result = await response.json();
+// --- 7. Form Submission (Google Apps Script API) ---
+const form = document.getElementById('registration-form');
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
     
-    if (result.result === "success") {
-      document.getElementById('success-name').innerText = fullName;
-      document.getElementById('success-industry').innerText = businessName;
-      
-      navigateTo('screen-success');
-      stopCamera(); // Turn off camera light safely
-    } else {
-      throw new Error(result.message || "Server Error");
-    }
+    // Collect Data
+    const fullName = document.getElementById('full-name').value.trim();
+    const position = document.getElementById('position').value;
+    const businessName = document.getElementById('business-name').value.trim();
+    const foodServiceChannel = document.getElementById('food-service-channel').value;
+    const topDish = document.getElementById('top-dish').value.trim();
+    const alaskaUser = document.getElementById('alaska-user').value;
+    const businessAddress = document.getElementById('business-address').value.trim();
+    const contactNumber = document.getElementById('contact-number').value.trim();
+    
+    const errorText = document.getElementById('form-error');
+    const submitBtn = document.getElementById('submit-form');
 
-  } catch (err) {
-    console.error("Submission failed:", err);
-    errorText.innerText = "Submission failed. Please check your internet and try again.";
-  } finally {
-    submitBtn.innerText = originalBtnText;
-    submitBtn.disabled = false;
-  }
-});
+    // Basic Validation
+    if (!fullName || !position || !businessName || !foodServiceChannel || !topDish || !alaskaUser || !businessAddress || !contactNumber) {
+      errorText.innerText = "Please fill out all fields.";
+      return;
+    }
+    
+    errorText.innerText = "";
+    
+    // Update Button State
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+    submitBtn.disabled = true;
+
+    // Grab the compressed image
+    const photoDataUrl = document.getElementById('preview-canvas').toDataURL('image/jpeg', 0.5);
+
+    const scriptPayload = {
+      fullName: fullName,
+      position: position,
+      businessName: businessName,
+      foodServiceChannel: foodServiceChannel,
+      topDish: topDish,
+      alaskaUser: alaskaUser,
+      businessAddress: businessAddress,
+      contactNumber: contactNumber,
+      selectedQuote: quotes[currentQuoteIndex].replace('\n', ' '), // Send as one line to the Google Sheet
+      photoData: photoDataUrl
+    };
+
+    try {
+      // ⚠️ REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
+      const googleScriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; 
+
+      const response = await fetch(googleScriptUrl, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'text/plain;charset=utf-8', 
+        },
+        body: JSON.stringify(scriptPayload)
+      });
+
+      const result = await response.json();
+      
+      if (result.result === "success") {
+        document.getElementById('success-name').innerText = fullName;
+        document.getElementById('success-industry').innerText = businessName;
+        
+        navigateTo('screen-success');
+        stopCamera(); 
+      } else {
+        throw new Error(result.message || "Server Error");
+      }
+
+    } catch (err) {
+      console.error("Submission failed:", err);
+      errorText.innerText = "Submission failed. Please check your internet and try again.";
+    } finally {
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+    }
+  });
+}
