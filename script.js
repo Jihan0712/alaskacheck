@@ -225,7 +225,9 @@ if (form) {
     const alaskaUser = document.getElementById('alaska-user').value;
     const businessAddress = document.getElementById('business-address').value.trim();
     const contactNumber = document.getElementById('contact-number').value.trim();
-    
+    const dairyProduct = document.getElementById('dairy-product').value.trim();
+    const monthlyVolume = document.getElementById('monthly-volume').value.trim();
+
     const errorText = document.getElementById('form-error');
     const submitBtn = document.getElementById('submit-form');
 
@@ -254,12 +256,14 @@ if (form) {
       alaskaUser: alaskaUser,
       businessAddress: businessAddress,
       contactNumber: contactNumber,
+      dairyProduct: dairyProduct,
+      monthlyVolume: monthlyVolume,
       selectedQuote: quotes[currentQuoteIndex].replace('\n', ' '), // Send as one line to the Google Sheet
       photoData: photoDataUrl
     };
 
     try {
-      const hiddenEndpoint = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5OTVCdzFPeW9uSU5qRWxCNDBSMHlibHlYOEFfdnFpQURfaDNmaE9yWXlOd2h6bnowUDZnRWdPUTl0OV8tZkVXdy9leGVj";
+      const hiddenEndpoint = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4dDludGt5aEdwRHRacENkWmM3YVV4dVkxR1pkeWY3eUxjWmpJdlhBUkFKV1kxN0thQ0I2Vk5PYnJ2ek01NkJ2QS9leGVj";
       const googleScriptUrl = atob(hiddenEndpoint);
       
       const response = await fetch(googleScriptUrl, {
