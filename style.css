@@ -112,6 +112,7 @@ body {
 }
 
 /* Screen 2 */
+/* Screen 2: Original Privacy Modal */
 .privacy-screen { background-color: rgba(28, 53, 112, 0.6); justify-content: center; }
 .privacy-logo { position: absolute; top: 3vh; opacity: 0.5; }
 .privacy-card {
@@ -124,11 +125,72 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   z-index: 20;
 }
-.privacy-card p { font-size: 14px; font-weight: 500; margin-bottom: 3vh; line-height: 1.5; }
+.privacy-card p { font-size: 14px; font-weight: 500; margin-bottom: 2vh; line-height: 1.5; }
 .policy-link { color: var(--danger-red); text-decoration: underline; cursor: pointer; }
 .modal-primary-btn { width: 100%; background: #23428b; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; margin-bottom: 1.5vh; cursor: pointer; }
 .modal-secondary-btn { width: 100%; background: white; color: #23428b; border: 1px solid #23428b; padding: 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
+/* Checkbox Styling  */
+.consent-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 3vh;
+  text-align: left; /* Left align for checkbox readability */
+  background: #f5f7fa; /* Soft background to frame the checkboxes */
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+.consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+.consent-checkbox {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--text-blue); /* Matches your blue theme */
+}
+.consent-text {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-blue);
+}
+/* scroll box */
+.privacy-scroll-box {
+  flex-grow: 1;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #333;
+  background: #f5f7fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 2vh;
+  border: 1px solid #dcdcdc;
+}
+
+.privacy-scroll-box h3 {
+  font-size: 12px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: var(--text-blue);
+}
+
+.privacy-scroll-box ul {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.privacy-scroll-box p {
+  margin-bottom: 10px;
+  font-size: 11px; /* Overrides the previous p styling */
+}
 /* Screen 3 */
 .camera-screen { padding: 0; overflow: hidden; }
 .camera-logo { position: absolute; top: 3vh; z-index: 10; }
