@@ -35,10 +35,16 @@
         <img src="assets/logo.png" alt="Alaska Pro logo" class="logo privacy-logo" />
         <div class="privacy-card">
           <p>By continuing, you agree to our <span class="policy-link" onclick="navigateTo('screen-policy-text')" style="text-decoration: underline; cursor: pointer;">Privacy Policy</span> and consent to the use of your photo for this event.</p>
-          <div class="button-row">
-            <button id="accept-privacy" class="modal-primary-btn" onclick="startExperience()">ACCEPT</button>
-            <button id="cancel-privacy" class="modal-secondary-btn" onclick="navigateTo('screen-landing')">CANCEL</button>
+          <div class="consent-section">
+            <label class="consent-label">
+              <input type="checkbox" id="privacy-ack" class="consent-checkbox">
+              <span class="consent-text">I confirm that I have read and understood the Alaska Pro AR Registration Privacy Notice. <strong>(Required)</strong></span>
+            </label>
           </div>
+          <div id="privacy-error" class="error-text" style="display:none; margin-bottom: 10px; font-size: 12px;">You must acknowledge the privacy notice to proceed.</div>
+
+          <button class="modal-primary-btn" id="accept-privacy">ACCEPT</button>
+          <button class="modal-secondary-btn" id="cancel-privacy">CANCEL</button>
         </div>
       </div>
     </section>
@@ -48,7 +54,78 @@
       <div class="screen-inner">
         <h2>Privacy Policy</h2>
         <div style="flex-grow: 1; overflow-y: auto; text-align: left; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 20px;">
-          <p>Insert your full privacy policy text here...</p>
+          <div class="privacy-scroll-box">
+            <p><strong>Alaska Pro AR Registration</strong></p>
+            <p>This Privacy Notice explains how Alaska Milk Corporation ("AMC," "we," "us," or "our") collects, uses, stores, shares, and protects your personal information when you complete the Alaska Pro AR Registration (the "Registration").</p>
+            <p>Please read this notice before submitting the Registration. It applies only to the registration information listed below. A separate or expanded notice must be provided before any AR functionality processes camera imagery, device permissions, or other technical data.</p>
+            
+            <h3>1. Information We Collect</h3>
+            <p>We collect the following information directly from you through the Registration form:</p>
+            <ul>
+              <li><strong>Identity and contact details:</strong> Name, Business address, Contact number</li>
+              <li><strong>Professional and business details:</strong> Position or role, Name of business, Type of food service channel, Top dish or best-selling menu item, Alaska product usage status</li>
+            </ul>
+            <p>We collect the information directly from you when you type it into the Registration form or choose a dropdown option and submit the form. Please provide only accurate information that relates to you or your own business role. Do not submit another person’s personal information unless you are authorized to do so.</p>
+            
+            <h3>2. Why We Use Your Information</h3>
+            <p>We may use your information to:</p>
+            <ul>
+              <li>Create, verify, and manage your Registration</li>
+              <li>Contact you about registration confirmation, participation instructions, schedule changes, support, safety, or other service-related matters</li>
+              <li>Understand participants’ professional roles, food service channels, menu specialties, and Alaska product usage</li>
+              <li>Tailor Alaska Pro content, product education, resources, or participant support to relevant business segments</li>
+              <li>Prepare aggregated or anonymized reports and insights about Registration and program performance</li>
+              <li>Protect the Registration process, investigate misuse, and comply with applicable legal, regulatory, audit, or reporting requirements</li>
+            </ul>
+            <p>We will not use your contact number for promotional messages unless you provide a separate, optional consent or another lawful basis permits that use.</p>
+            <p>AMC may group Registration entries by position, food service channel, top dish, or Alaska product usage to understand the audience and tailor program content or support. The Registration will not use solely automated processing to make a decision that produces legal or similarly significant effects on you.</p>
+            
+            <h3>3. Legal Bases and Your Choices</h3>
+            <p>Depending on the purpose and circumstances, AMC may process your information because it is necessary to take steps at your request in connection with the Registration or participation arrangement; because AMC has a legitimate interest in administering, securing, evaluating, and improving the program, provided that your rights do not override that interest; because processing is required by law; or because you have given consent for a specific optional purpose.</p>
+            <p>Fields marked as required must be completed to process your Registration. If you do not provide required information, we may be unable to register you or provide the related program experience. Optional fields may be left blank without affecting your Registration, unless the form clearly explains otherwise.</p>
+            
+            <h3>4. Who May Receive Your Information</h3>
+            <p>Access is limited to persons and organizations that need the information for the purposes described in this notice, which may include:</p>
+            <ul>
+              <li>Authorized AMC personnel</li>
+              <li>The authorized event, activation, or registration agency supporting Alaska Pro AR</li>
+              <li>Technology providers that host the form, store records, manage communications, provide analytics, or support the platform</li>
+              <li>Professional advisers, auditors, insurers, regulators, courts, law-enforcement authorities, or other parties when disclosure is required or permitted by law</li>
+            </ul>
+            <p>Service providers must process personal information only on documented instructions, use appropriate safeguards, and keep the information confidential. AMC does not sell or rent Registration information.</p>
+            
+            <h3>5. Storage, Transfers, and Retention</h3>
+            <p>Registration information may be stored in systems operated by AMC or its authorized service providers. If information is processed or stored outside the Philippines, AMC will use appropriate contractual, organizational, and security safeguards and remain accountable for the transfer as required by applicable law.</p>
+            <p>AMC will retain Registration information for the approved retention period after the Registration or related program ends, unless a longer period is necessary for legal claims, audit, regulatory, or other lawful purposes. After the retention period, the information will be securely deleted, destroyed, or anonymized.</p>
+            
+            <h3>6. How We Protect Your Information</h3>
+            <p>AMC applies reasonable and appropriate organizational, physical, and technical safeguards designed to protect personal information against accidental or unlawful destruction, alteration, loss, unauthorized disclosure, misuse, or access. These safeguards may include role-based access, confidentiality obligations, secure storage and transmission, vendor controls, monitoring, and secure disposal procedures. No system is completely secure, but AMC reviews safeguards in light of the nature and risks of the processing.</p>
+            
+            <h3>7. Your Rights</h3>
+            <p>Under Republic Act No. 10173, or the Philippine Data Privacy Act of 2012, and its implementing rules, you may have the right to:</p>
+            <ul>
+              <li>Be informed about the processing of your personal information</li>
+              <li>Access personal information AMC processes about you</li>
+              <li>Object to processing, including direct marketing, automated processing, or profiling, where applicable</li>
+              <li>Correct inaccurate or incomplete personal information</li>
+              <li>Request erasure or blocking when the legal conditions are met</li>
+              <li>Withdraw consent for future processing where processing relies on consent</li>
+              <li>Receive or transmit qualifying data in a structured, commonly used format, where data portability applies</li>
+              <li>Claim damages and file a complaint with the National Privacy Commission</li>
+            </ul>
+            <p>To protect your information, AMC may verify your identity before acting on a request. Some rights are subject to lawful exceptions and may not apply in every circumstance. Withdrawing consent does not affect processing already carried out lawfully before withdrawal.</p>
+            
+            <h3>8. Changes to This Notice</h3>
+            <p>AMC may update this notice when the Registration process, purposes, recipients, retention arrangements, or legal requirements change. The updated notice will show a new effective date. Where required, AMC will provide additional notice or request new consent before materially different processing begins.</p>
+            
+            <h3>9. Contact Us</h3>
+            <p>For privacy questions, requests, objections, or complaints relating to this Registration, contact:</p>
+            <p><strong>Alaska Milk Corporation</strong><br>
+            Data Protection Officer / Privacy Contact: Atty. Cashmer Dirampaten / Atty. Maricris Connie B. Pua<br>
+            Email: dataprivacy.officer@frieslandcampina.com<br>
+            Address: 6/F Corinthian Plaza Bldg Paseo de Roxas Makati City</p>
+            <p>You may also contact or file a complaint with the National Privacy Commission through its official website at https://privacy.gov.ph/.</p>
+          </div>
           <p>We collect your photo and data solely for the purpose of the event. Data will be handled in accordance with the Data Privacy Act of 2012.</p>
         </div>
         <div class="bottom-buttons">
@@ -126,7 +203,7 @@
           </select>
 
           <input type="text" id="business-address" class="form-input" placeholder="Business Address" required />
-          <input type="tel" id="contact-number" class="form-input" placeholder="Contact Number" required />
+          <input type="tel" id="contact-number" class="form-input" placeholder="Contact Number (09XX-XXXX-XXX)" required />
           <input type="text" id="dairy-product" class="form-input" placeholder="Most used dairy product?" required />
           <input type="text" id="monthly-volume" class="form-input" placeholder="Monthly volume (Cases/Month)" required />
 

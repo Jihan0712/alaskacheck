@@ -47,9 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.getElementById('start-registration');
   if (startBtn) startBtn.addEventListener('click', () => navigateTo('screen-privacy'));
 
-  // Screen 2: Privacy Modal
+  // Screen 2: Privacy Modal Logic
   const acceptBtn = document.getElementById('accept-privacy');
-  if (acceptBtn) acceptBtn.addEventListener('click', startExperience);
+  if (acceptBtn) {
+    acceptBtn.addEventListener('click', () => {
+      const ackBox = document.getElementById('privacy-ack');
+      const errorMsg = document.getElementById('privacy-error');
+      
+      // Strict validation constraint
+      if (!ackBox.checked) {
+        errorMsg.style.display = 'block';
+        return;
+      }
+      
+      errorMsg.style.display = 'none';
+      startExperience();
+    });
+  }
   
   const cancelBtn = document.getElementById('cancel-privacy');
   if (cancelBtn) cancelBtn.addEventListener('click', () => navigateTo('screen-landing'));
@@ -258,7 +272,7 @@ if (form) {
       contactNumber: contactNumber,
       dairyProduct: dairyProduct,
       monthlyVolume: monthlyVolume,
-      selectedQuote: quotes[currentQuoteIndex].replace('\n', ' '), // Send as one line to the Google Sheet
+      selectedQuote: quotes[currentQuoteIndex].replace('\n', ' '), 
       photoData: photoDataUrl
     };
 
